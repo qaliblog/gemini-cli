@@ -11,7 +11,7 @@ import { theme } from '../semantic-colors.js';
 import { RadioButtonSelect } from '../components/shared/RadioButtonSelect.js';
 import type { LoadedSettings } from '../../config/settings.js';
 import { SettingScope } from '../../config/settings.js';
-import { AuthType } from '@google/gemini-cli-core';
+// AuthType is imported for type checking but not used directly in this component
 import { useKeypress } from '../hooks/useKeypress.js';
 import { AuthState } from '../types.js';
 
@@ -135,7 +135,7 @@ export function MultipleApiConfig({
       } else if (value === 'finish') {
         handleFinish();
       } else if (value.startsWith('api-')) {
-        const index = parseInt(value.split('-')[1]);
+        const index = parseInt(value.split('-')[1], 10);
         handleEditApi(index);
       }
     };

@@ -13,11 +13,8 @@ import type {
   EmbedContentParameters,
 } from '@google/genai';
 import { GoogleGenAI } from '@google/genai';
-import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js';
-import type { Config } from '../config/config.js';
 import type { UserTierId } from '../code_assist/types.js';
 import { LoggingContentGenerator } from './loggingContentGenerator.js';
-import { InstallationManager } from '../utils/installationManager.js';
 import type { ContentGenerator } from './contentGenerator.js';
 
 export interface ApiConfig {
@@ -91,7 +88,7 @@ export class MultipleApiContentGenerator implements ContentGenerator {
     return this.generators.get(currentApi.id) || null;
   }
 
-  private async handleApiError(apiId: string, error: any): Promise<void> {
+  private async handleApiError(apiId: string, error: Error | unknown): Promise<void> {
     console.warn(`API ${apiId} failed:`, error);
     this.failedApis.add(apiId);
     this.lastFailureTime = Date.now();
@@ -100,10 +97,11 @@ export class MultipleApiContentGenerator implements ContentGenerator {
     this.config.currentApiIndex = (this.config.currentApiIndex + 1) % this.config.apis.length;
   }
 
-  private isRpmError(error: any): boolean {
-    const errorMessage = error?.message?.toLowerCase() || '';
-    const errorCode = error?.code || '';
-    const status = error?.status || '';
+  private isRpmError(error: Error | unknown): boolean {
+    const errorObj = error as Error & { code?: string; status?: number };
+    const errorMessage = errorObj?.message?.toLowerCase() || '';
+    const errorCode = errorObj?.code || '';
+    const status = errorObj?.status || '';
     
     return (
       errorMessage.includes('rate limit') ||
@@ -124,7 +122,7 @@ export class MultipleApiContentGenerator implements ContentGenerator {
     request: GenerateContentParameters,
     userPromptId: string,
   ): Promise<GenerateContentResponse> {
-    let lastError: any = null;
+    let lastError: Error | unknown = null;
     let attempts = 0;
 
     while (attempts < this.config.maxRetries) {
@@ -168,7 +166,7 @@ export class MultipleApiContentGenerator implements ContentGenerator {
     request: GenerateContentParameters,
     userPromptId: string,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
-    let lastError: any = null;
+    let lastError: Error | unknown = null;
     let attempts = 0;
 
     while (attempts < this.config.maxRetries) {
