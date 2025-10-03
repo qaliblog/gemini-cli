@@ -25,29 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: |
-        # Generate package-lock.json if it doesn't exist
-        if [ ! -f package-lock.json ]; then
-          echo "Generating package-lock.json..."
-          npm install --package-lock-only
-          echo "package-lock.json generated successfully"
-        fi
-        npm ci
-
-    - name: Commit generated package-lock.json
-      if: github.ref == 'refs/heads/main'
-      run: |
-        if [ -f package-lock.json ]; then
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add package-lock.json
-          if git diff --staged --quiet; then
-            echo "No changes to package-lock.json"
-          else
-            git commit -m "chore: Auto-generate package-lock.json with updated package names"
-            git push
-          fi
-        fi
+      run: npm install
 
     - name: Run linting
       run: npm run lint:ci
@@ -97,7 +75,7 @@ jobs:
           echo "Generating package-lock.json..."
           npm install --package-lock-only
         fi
-        npm ci
+        npm install
 
     - name: Download build artifacts
       uses: actions/download-artifact@v4
@@ -148,7 +126,7 @@ jobs:
           echo "Generating package-lock.json..."
           npm install --package-lock-only
         fi
-        npm ci
+        npm install
 
     - name: Build Termon
       run: npm run build
