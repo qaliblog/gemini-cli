@@ -25,11 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: |
-        # Generate package-lock.json first
-        npm ci --package-lock-only
-        # Then install dependencies
-        npm ci
+      run: npm install
 
     - name: Run linting
       run: npm run lint:ci
@@ -73,13 +69,7 @@ jobs:
         node-version: '20.x'
 
     - name: Install dependencies
-      run: |
-        # Generate package-lock.json if it doesn't exist
-        if [ ! -f package-lock.json ]; then
-          echo "Generating package-lock.json..."
-          npm ci --package-lock-only
-        fi
-        npm ci
+      run: npm install
 
     - name: Download build artifacts
       uses: actions/download-artifact@v4
@@ -124,13 +114,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install dependencies
-      run: |
-        # Generate package-lock.json if it doesn't exist
-        if [ ! -f package-lock.json ]; then
-          echo "Generating package-lock.json..."
-          npm ci --package-lock-only
-        fi
-        npm ci
+      run: npm install
 
     - name: Build Termon
       run: npm run build
