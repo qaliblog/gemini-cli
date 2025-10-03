@@ -62,7 +62,7 @@
     }
   },
   "bin": {
-    "gemini": "bundle/gemini.js"
+    "termon": "bundle/termon.js"
   },
   "files": [
     "bundle/",
@@ -127,9 +127,4 @@
       "prettier --write"
     ]
   }
-}
-]
-  }
-}
-}
 }
