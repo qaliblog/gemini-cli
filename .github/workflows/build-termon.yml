@@ -25,7 +25,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm install
+      run: |
+        # Generate package-lock.json first
+        npm ci --package-lock-only
+        # Then install dependencies
+        npm ci
 
     - name: Run linting
       run: npm run lint:ci
@@ -73,9 +77,9 @@ jobs:
         # Generate package-lock.json if it doesn't exist
         if [ ! -f package-lock.json ]; then
           echo "Generating package-lock.json..."
-          npm install --package-lock-only
+          npm ci --package-lock-only
         fi
-        npm install
+        npm ci
 
     - name: Download build artifacts
       uses: actions/download-artifact@v4
@@ -124,9 +128,9 @@ jobs:
         # Generate package-lock.json if it doesn't exist
         if [ ! -f package-lock.json ]; then
           echo "Generating package-lock.json..."
-          npm install --package-lock-only
+          npm ci --package-lock-only
         fi
-        npm install
+        npm ci
 
     - name: Build Termon
       run: npm run build
