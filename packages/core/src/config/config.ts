@@ -10,6 +10,7 @@ import type {
   ContentGenerator,
   ContentGeneratorConfig,
 } from '../core/contentGenerator.js';
+import type { ApiConfig } from '../core/multipleApiContentGenerator.js';
 import {
   AuthType,
   createContentGenerator,
@@ -242,6 +243,7 @@ export interface ConfigParameters {
   loadMemoryFromIncludeDirectories?: boolean;
   chatCompression?: ChatCompressionSettings;
   interactive?: boolean;
+  multipleApis?: ApiConfig[];
   trustedFolder?: boolean;
   useRipgrep?: boolean;
   shouldUseNodePtyShell?: boolean;
@@ -353,6 +355,7 @@ export class Config {
   private readonly useModelRouter: boolean;
   private readonly enableMessageBusIntegration: boolean;
   private readonly enableSubagents: boolean;
+  private readonly multipleApis: ApiConfig[] | undefined;
 
   constructor(params: ConfigParameters) {
     this.sessionId = params.sessionId;
@@ -467,6 +470,7 @@ export class Config {
     }
     this.geminiClient = new GeminiClient(this);
     this.modelRouterService = new ModelRouterService(this);
+    this.multipleApis = params.multipleApis;
   }
 
   /**
@@ -564,6 +568,10 @@ export class Config {
 
   getContentGeneratorConfig(): ContentGeneratorConfig {
     return this.contentGeneratorConfig;
+  }
+
+  getMultipleApis(): ApiConfig[] | undefined {
+    return this.multipleApis;
   }
 
   getModel(): string {

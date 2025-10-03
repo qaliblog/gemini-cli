@@ -19,6 +19,7 @@ import type { Config } from '../config/config.js';
 import type { UserTierId } from '../code_assist/types.js';
 import { LoggingContentGenerator } from './loggingContentGenerator.js';
 import { InstallationManager } from '../utils/installationManager.js';
+import { MultipleApiContentGenerator, type ApiConfig } from './multipleApiContentGenerator.js';
 
 /**
  * Interface abstracting the core functionalities for generating content and counting tokens.
@@ -46,6 +47,7 @@ export enum AuthType {
   USE_GEMINI = 'gemini-api-key',
   USE_VERTEX_AI = 'vertex-ai',
   CLOUD_SHELL = 'cloud-shell',
+  MULTIPLE_APIS = 'multiple-apis',
 }
 
 export type ContentGeneratorConfig = {
@@ -53,6 +55,7 @@ export type ContentGeneratorConfig = {
   vertexai?: boolean;
   authType?: AuthType;
   proxy?: string;
+  multipleApis?: ApiConfig[];
 };
 
 export function createContentGeneratorConfig(
@@ -146,6 +149,36 @@ export async function createContentGenerator(
     });
     return new LoggingContentGenerator(googleGenAI.models, gcConfig);
   }
+
+  if (config.authType === AuthType.MULTIPLE_APIS) {
+    const multipleApis = gcConfig.getMultipleApis();
+    if (!multipleApis || multipleApis.length === 0) {
+      throw new Error('Multiple APIs configuration is required for MULTIPLE_APIS auth type');
+    }
+
+    // Load API keys from environment variables
+    const apisWithKeys = multipleApis.map((api, index) => {
+      const envKey = `GEMINI_API_KEY_${index + 1}`;
+      const apiKey = process.env[envKey] || api.apiKey;
+      
+      if (!apiKey) {
+        throw new Error(`API key not found for ${api.name}. Set ${envKey} environment variable.`);
+      }
+
+      return {
+        ...api,
+        apiKey,
+      };
+    });
+
+    return new MultipleApiContentGenerator({
+      apis: apisWithKeys,
+      currentApiIndex: 0,
+      retryDelay: 30000, // 30 seconds
+      maxRetries: 3,
+    });
+  }
+
   throw new Error(
     `Error creating contentGenerator: Unsupported authType: ${config.authType}`,
   );

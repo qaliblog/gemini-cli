@@ -1,5 +1,5 @@
 {
-  "name": "@google/gemini-cli",
+  "name": "termon",
   "version": "0.9.0-nightly.20251001.163dba7e",
   "engines": {
     "node": ">=20.0.0"
@@ -127,4 +127,9 @@
       "prettier --write"
     ]
   }
+}
+]
+  }
+}
+}
 }

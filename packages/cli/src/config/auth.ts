@@ -39,5 +39,10 @@ export function validateAuthMethod(authMethod: string): string | null {
     return null;
   }
 
+  if (authMethod === AuthType.MULTIPLE_APIS) {
+    // Multiple APIs option will be handled by the CLI configuration screen
+    return null;
+  }
+
   return 'Invalid auth method selected.';
 }

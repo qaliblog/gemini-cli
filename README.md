@@ -1,15 +1,15 @@
 # Gemini CLI
 
-[![Gemini CLI CI](https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml)
-[![Gemini CLI E2E](https://github.com/google-gemini/gemini-cli/actions/workflows/e2e.yml/badge.svg)](https://github.com/google-gemini/gemini-cli/actions/workflows/e2e.yml)
-[![Version](https://img.shields.io/npm/v/@google/gemini-cli)](https://www.npmjs.com/package/@google/gemini-cli)
-[![License](https://img.shields.io/github/license/google-gemini/gemini-cli)](https://github.com/google-gemini/gemini-cli/blob/main/LICENSE)
+[![Termon CI](https://github.com/google-gemini/termon/actions/workflows/ci.yml/badge.svg)](https://github.com/google-gemini/termon/actions/workflows/ci.yml)
+[![Termon E2E](https://github.com/google-gemini/termon/actions/workflows/e2e.yml/badge.svg)](https://github.com/google-gemini/termon/actions/workflows/e2e.yml)
+[![Version](https://img.shields.io/npm/v/termon)](https://www.npmjs.com/package/termon)
+[![License](https://img.shields.io/github/license/google-gemini/termon)](https://github.com/google-gemini/termon/blob/main/LICENSE)
 
 ![Gemini CLI Screenshot](./docs/assets/gemini-screenshot.png)
 
 Gemini CLI is an open-source AI agent that brings the power of Gemini directly into your terminal. It provides lightweight access to Gemini, giving you the most direct path from your prompt to our model.
 
-## 🚀 Why Gemini CLI?
+## 🚀 Why Termon?
 
 - **🎯 Free tier**: 60 requests/min and 1,000 requests/day with personal Google account.
 - **🧠 Powerful Gemini 2.5 Pro**: Access to 1M token context window.
@@ -71,7 +71,7 @@ npm install -g @google/gemini-cli@latest
 - New releases will be published each week at UTC 0000 each day, This will be all changes from the main branch as represented at time of release. It should be assumed there are pending validations and issues. Use `nightly` tag.
 
 ```bash
-npm install -g @google/gemini-cli@nightly
+npm install -g termon@nightly
 ```
 
 ## 📋 Key Features
@@ -201,7 +201,7 @@ For more advanced scripting, including how to parse JSON and handle errors, use
 the `--output-format json` flag to get structured output:
 
 ```bash
-gemini -p "Explain the architecture of this codebase" --output-format json
+termon -p "Explain the architecture of this codebase" --output-format json
 ```
 
 ### Quick Examples
@@ -217,9 +217,9 @@ gemini
 #### Analyze existing code
 
 ```bash
-git clone https://github.com/google-gemini/gemini-cli
-cd gemini-cli
-gemini
+git clone https://github.com/google-gemini/termon
+cd termon
+termon
 > Give me a summary of all of the changes that went in yesterday
 ```
 
@@ -236,7 +236,7 @@ gemini
 
 - [**Commands Reference**](./docs/cli/commands.md) - All slash commands (`/help`, `/chat`, etc).
 - [**Custom Commands**](./docs/cli/custom-commands.md) - Create your own reusable commands.
-- [**Context Files (GEMINI.md)**](./docs/cli/gemini-md.md) - Provide persistent context to Gemini CLI.
+- [**Context Files (TERMON.md)**](./docs/cli/gemini-md.md) - Provide persistent context to Termon.
 - [**Checkpointing**](./docs/cli/checkpointing.md) - Save and resume conversations.
 - [**Token Caching**](./docs/cli/token-caching.md) - Optimize token usage.
 
@@ -252,7 +252,7 @@ gemini
 ### Advanced Topics
 
 - [**Headless Mode (Scripting)**](./docs/cli/headless.md) - Use Gemini CLI in automated workflows.
-- [**Architecture Overview**](./docs/architecture.md) - How Gemini CLI works.
+- [**Architecture Overview**](./docs/architecture.md) - How Termon works.
 - [**IDE Integration**](./docs/ide-integration/index.md) - VS Code companion.
 - [**Sandboxing & Security**](./docs/cli/sandbox.md) - Safe execution environments.
 - [**Trusted Folders**](./docs/cli/trusted-folders.md) - Control execution policies by folder.
@@ -295,9 +295,9 @@ Check our [Official Roadmap](https://github.com/orgs/google-gemini/projects/11) 
 
 - **[Official Roadmap](./ROADMAP.md)** - See what's coming next.
 - **[Changelog](./docs/changelogs/index.md)** - See recent notable updates.
-- **[NPM Package](https://www.npmjs.com/package/@google/gemini-cli)** - Package registry.
-- **[GitHub Issues](https://github.com/google-gemini/gemini-cli/issues)** - Report bugs or request features.
-- **[Security Advisories](https://github.com/google-gemini/gemini-cli/security/advisories)** - Security updates.
+- **[NPM Package](https://www.npmjs.com/package/termon)** - Package registry.
+- **[GitHub Issues](https://github.com/google-gemini/termon/issues)** - Report bugs or request features.
+- **[Security Advisories](https://github.com/google-gemini/termon/security/advisories)** - Security updates.
 
 ### Uninstall
 

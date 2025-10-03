@@ -5,7 +5,7 @@
  */
 
 import type React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Text } from 'ink';
 import { theme } from '../semantic-colors.js';
 import { RadioButtonSelect } from '../components/shared/RadioButtonSelect.js';
@@ -20,6 +20,7 @@ import { useKeypress } from '../hooks/useKeypress.js';
 import { AuthState } from '../types.js';
 import { runExitCleanup } from '../../utils/cleanup.js';
 import { validateAuthMethodWithSettings } from './useAuth.js';
+import { MultipleApiConfig } from './MultipleApiConfig.js';
 
 interface AuthDialogProps {
   config: Config;
@@ -36,6 +37,7 @@ export function AuthDialog({
   authError,
   onAuthError,
 }: AuthDialogProps): React.JSX.Element {
+  const [showMultipleApiConfig, setShowMultipleApiConfig] = useState(false);
   let items = [
     {
       label: 'Login with Google',
@@ -60,6 +62,11 @@ export function AuthDialog({
       label: 'Vertex AI',
       value: AuthType.USE_VERTEX_AI,
       key: AuthType.USE_VERTEX_AI,
+    },
+    {
+      label: 'Multiple APIs',
+      value: AuthType.MULTIPLE_APIS,
+      key: AuthType.MULTIPLE_APIS,
     },
   ];
 
@@ -124,6 +131,11 @@ Logging in with Google... Please restart Gemini CLI to continue.
   );
 
   const handleAuthSelect = (authMethod: AuthType) => {
+    if (authMethod === AuthType.MULTIPLE_APIS) {
+      setShowMultipleApiConfig(true);
+      return;
+    }
+    
     const error = validateAuthMethodWithSettings(authMethod, settings);
     if (error) {
       onAuthError(error);
@@ -152,6 +164,16 @@ Logging in with Google... Please restart Gemini CLI to continue.
     },
     { isActive: true },
   );
+
+  if (showMultipleApiConfig) {
+    return (
+      <MultipleApiConfig
+        settings={settings}
+        setAuthState={setAuthState}
+        onBack={() => setShowMultipleApiConfig(false)}
+      />
+    );
+  }
 
   return (
     <Box
@@ -186,13 +208,13 @@ Logging in with Google... Please restart Gemini CLI to continue.
       </Box>
       <Box marginTop={1}>
         <Text color={theme.text.primary}>
-          Terms of Services and Privacy Notice for Gemini CLI
+          Terms of Services and Privacy Notice for Termon
         </Text>
       </Box>
       <Box marginTop={1}>
         <Text color={theme.text.link}>
           {
-            'https://github.com/google-gemini/gemini-cli/blob/main/docs/tos-privacy.md'
+            'https://github.com/google-gemini/termon/blob/main/docs/tos-privacy.md'
           }
         </Text>
       </Box>

@@ -1,0 +1,145 @@
+name: Build Termon for All Platforms
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint:ci
+
+    - name: Run tests
+      run: npm run test:ci
+
+    - name: Build Termon
+      run: npm run build
+
+    - name: Build packages
+      run: npm run build:packages
+
+    - name: Build sandbox
+      run: npm run build:sandbox
+
+    - name: Build VS Code companion
+      run: npm run build:vscode
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: termon-build-${{ matrix.os }}
+        path: |
+          bundle/
+          packages/*/dist/
+        retention-days: 30
+
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts/
+
+    - name: Create release package
+      run: |
+        mkdir -p release
+        cp -r artifacts/term-build-ubuntu-latest/bundle release/
+        cp -r artifacts/term-build-windows-latest/bundle release/windows/
+        cp -r artifacts/term-build-macos-latest/bundle release/macos/
+        
+        # Create platform-specific packages
+        cd release
+        tar -czf termon-linux-x64.tar.gz bundle/
+        cd windows
+        tar -czf ../termon-windows-x64.tar.gz bundle/
+        cd ../macos
+        tar -czf ../termon-macos-x64.tar.gz bundle/
+
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: termon-release-packages
+        path: release/*.tar.gz
+        retention-days: 90
+
+  publish-npm:
+    needs: [build, package]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build Termon
+      run: npm run build
+
+    - name: Publish to npm
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run security audit
+      run: npm audit --audit-level=moderate
+
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
