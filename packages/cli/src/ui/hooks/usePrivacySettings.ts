@@ -10,7 +10,7 @@ import {
   type CodeAssistServer,
   UserTierId,
   getCodeAssistServer,
-} from '@google/gemini-cli-core';
+} from '@termon/core';
 
 export interface PrivacyState {
   isLoading: boolean;

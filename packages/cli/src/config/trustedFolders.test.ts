@@ -5,7 +5,7 @@
  */
 
 import * as osActual from 'node:os';
-import { FatalConfigError, ideContextStore } from '@google/gemini-cli-core';
+import { FatalConfigError, ideContextStore } from '@termon/core';
 import {
   describe,
   it,

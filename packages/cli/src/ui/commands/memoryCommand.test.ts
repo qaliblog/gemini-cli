@@ -15,12 +15,12 @@ import {
   getErrorMessage,
   loadServerHierarchicalMemory,
   type FileDiscoveryService,
-} from '@google/gemini-cli-core';
-import type { LoadServerHierarchicalMemoryResponse } from '@google/gemini-cli-core/index.js';
+} from '@termon/core';
+import type { LoadServerHierarchicalMemoryResponse } from '@termon/core/index.js';
 
-vi.mock('@google/gemini-cli-core', async (importOriginal) => {
+vi.mock('@termon/core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@google/gemini-cli-core')>();
+    await importOriginal<typeof import('@termon/core')>();
   return {
     ...original,
     getErrorMessage: vi.fn((error: unknown) => {

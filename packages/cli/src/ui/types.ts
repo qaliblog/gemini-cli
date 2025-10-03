@@ -11,7 +11,7 @@ import type {
   ToolCallConfirmationDetails,
   ToolConfirmationOutcome,
   ToolResultDisplay,
-} from '@google/gemini-cli-core';
+} from '@termon/core';
 import type { PartListUnion } from '@google/genai';
 import { type ReactNode } from 'react';
 

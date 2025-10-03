@@ -9,7 +9,7 @@ import {
   installExtension,
   requestConsentNonInteractive,
 } from '../../config/extension.js';
-import type { ExtensionInstallMetadata } from '@google/gemini-cli-core';
+import type { ExtensionInstallMetadata } from '@termon/core';
 
 import { getErrorMessage } from '../../utils/errors.js';
 

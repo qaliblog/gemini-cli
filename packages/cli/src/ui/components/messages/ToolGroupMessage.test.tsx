@@ -14,7 +14,7 @@ import { ToolCallStatus } from '../../types.js';
 import type {
   Config,
   ToolCallConfirmationDetails,
-} from '@google/gemini-cli-core';
+} from '@termon/core';
 import { TOOL_STATUS } from '../../constants.js';
 import { ConfigContext } from '../../contexts/ConfigContext.js';
 

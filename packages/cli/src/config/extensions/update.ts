@@ -19,7 +19,7 @@ import {
   loadExtensionConfig,
 } from '../extension.js';
 import { checkForExtensionUpdate } from './github.js';
-import type { GeminiCLIExtension } from '@google/gemini-cli-core';
+import type { GeminiCLIExtension } from '@termon/core';
 import * as fs from 'node:fs';
 import { getErrorMessage } from '../../utils/errors.js';
 

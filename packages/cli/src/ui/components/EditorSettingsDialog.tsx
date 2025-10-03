@@ -16,8 +16,8 @@ import {
 import { RadioButtonSelect } from './shared/RadioButtonSelect.js';
 import type { LoadedSettings } from '../../config/settings.js';
 import { SettingScope } from '../../config/settings.js';
-import type { EditorType } from '@google/gemini-cli-core';
-import { isEditorAvailable } from '@google/gemini-cli-core';
+import type { EditorType } from '@termon/core';
+import { isEditorAvailable } from '@termon/core';
 import { useKeypress } from '../hooks/useKeypress.js';
 
 interface EditorDialogProps {

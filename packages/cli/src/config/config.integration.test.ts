@@ -11,8 +11,8 @@ import { tmpdir } from 'node:os';
 import type {
   ConfigParameters,
   ContentGeneratorConfig,
-} from '@google/gemini-cli-core';
-import { Config } from '@google/gemini-cli-core';
+} from '@termon/core';
+import { Config } from '@termon/core';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
@@ -40,8 +40,8 @@ const TEST_CONTENT_GENERATOR_CONFIG: ContentGeneratorConfig = {
 };
 
 // Mock file discovery service and tool registry
-vi.mock('@google/gemini-cli-core', async () => {
-  const actual = await vi.importActual('@google/gemini-cli-core');
+vi.mock('@termon/core', async () => {
+  const actual = await vi.importActual('@termon/core');
   return {
     ...actual,
     FileDiscoveryService: vi.fn().mockImplementation(() => ({

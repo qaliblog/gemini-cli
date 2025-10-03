@@ -18,8 +18,8 @@ import type {
   SessionMetrics,
   ModelMetrics,
   ToolCallStats,
-} from '@google/gemini-cli-core';
-import { uiTelemetryService, sessionId } from '@google/gemini-cli-core';
+} from '@termon/core';
+import { uiTelemetryService, sessionId } from '@termon/core';
 
 export enum ToolCallDecision {
   ACCEPT = 'accept',
